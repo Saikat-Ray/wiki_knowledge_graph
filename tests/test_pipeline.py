@@ -8,6 +8,8 @@ from wiki_kg.pipeline import KnowledgeGraphPipeline, Triple
 def make_pipeline() -> KnowledgeGraphPipeline:
     pipeline = KnowledgeGraphPipeline.__new__(KnowledgeGraphPipeline)
     pipeline.nlp = spacy.load("en_core_web_sm")
+    pipeline.page_title = None
+    pipeline.page_url = None
     return pipeline
 
 

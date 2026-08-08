@@ -22,6 +22,12 @@ python -m spacy download en_core_web_sm
 export PYTHONPATH="$PWD/src"
 ```
 
+If you created the environment before this update, repair it with:
+
+```bash
+pip install --upgrade --force-reinstall -r requirements.txt
+```
+
 ## Build a graph
 
 ```bash

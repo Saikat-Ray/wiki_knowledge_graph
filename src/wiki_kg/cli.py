@@ -20,8 +20,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    pipeline = KnowledgeGraphPipeline()
-    article = pipeline.gather(args.title)
+    try:
+        pipeline = KnowledgeGraphPipeline()
+        article = pipeline.gather(args.title)
+    except (RuntimeError, ValueError) as exc:
+        raise SystemExit(f"Error: {exc}") from exc
     sentences = pipeline.preprocess(article, args.max_sentences)
     triples = pipeline.extract_triples(sentences)
     graph = pipeline.build_graph(triples)
