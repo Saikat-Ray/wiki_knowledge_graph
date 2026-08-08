@@ -7,8 +7,9 @@ on:
 
 permissions:
   contents: read
-  issues: read
+  issues: write
   pull-requests: write
+  repository-projects: read
 
 jobs:
   call-ai-review:
