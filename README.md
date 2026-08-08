@@ -1,4 +1,4 @@
-# Wikipedia spaCy Knowledge Graph
+# Wikipedia spaCy Knowledge Graph - Created by Saikat Ray
 
 A small end-to-end NLP project that turns an English Wikipedia article into a queryable, interactive knowledge graph.
 
