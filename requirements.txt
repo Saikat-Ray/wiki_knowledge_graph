@@ -1,5 +1,6 @@
 wikipedia>=1.4.0
 spacy>=3.7.0,<4.0.0
+# spaCy's CLI imports this directly; pin it explicitly for clean Python 3.14 installs.
+click>=8.1.7,<9.0.0
 networkx>=3.2.0
 pyvis>=0.3.2
-

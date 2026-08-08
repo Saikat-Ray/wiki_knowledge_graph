@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
+from json import JSONDecodeError
 from pathlib import Path
 from typing import Iterable
 
 import networkx as nx
+import requests
 import spacy
 import wikipedia
 from spacy.language import Language
@@ -35,6 +37,8 @@ class KnowledgeGraphPipeline:
     def __init__(self, model: str = "en_core_web_sm") -> None:
         # The package also supports other Wikipedia editions; fix this pipeline to English.
         wikipedia.set_lang("en")
+        # Wikimedia rejects some generic client headers; identify this educational client.
+        wikipedia.set_user_agent("WikiKnowledgeGraph/1.0 (spaCy + NetworkX learning project)")
         try:
             self.nlp: Language = spacy.load(model)
         except OSError as exc:
@@ -55,6 +59,11 @@ class KnowledgeGraphPipeline:
             raise ValueError(f"'{title}' is ambiguous. Try one of: {choices}") from exc
         except wikipedia.PageError as exc:
             raise ValueError(f"Wikipedia page not found: {title}") from exc
+        except (requests.RequestException, JSONDecodeError) as exc:
+            raise RuntimeError(
+                "Wikipedia did not return a valid article response. Check your network connection "
+                "and try again; the public Wikipedia API may be temporarily rate-limiting requests."
+            ) from exc
 
         self.page_title = page.title
         self.page_url = page.url
