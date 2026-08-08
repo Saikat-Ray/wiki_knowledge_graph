@@ -10,13 +10,16 @@ jobs:
     if: >
       github.event_name == 'workflow_dispatch' ||
       (github.event.issue.pull_request && startsWith(github.event.comment.body, '/review'))
-    uses: Saikat-Ray/genai_code_reviewer/.github/workflows/reusable-review.yml@main
-    with:
-      pr_number: ${{ github.event.issue.number }}
-      trigger_comment: ${{ github.event.comment.body }}
-      trigger_user: ${{ github.event.comment.user.login }}
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call reusable AI review workflow
+        uses: Saikat-Ray/genai_code_reviewer/.github/workflows/reusable-review.yml@main
+        with:
+          pr_number: ${{ github.event.issue.number }}
+          trigger_comment: ${{ github.event.comment.body }}
+          trigger_user: ${{ github.event.comment.user.login }}
+        secrets:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
