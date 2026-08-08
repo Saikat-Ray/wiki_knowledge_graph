@@ -6,6 +6,7 @@ on:
   workflow_dispatch:  # for manual testing
 
 permissions:
+  contents: read
   issues: read
   pull-requests: write
 
