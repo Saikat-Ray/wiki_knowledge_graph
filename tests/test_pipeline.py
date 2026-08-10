@@ -16,13 +16,13 @@ def make_pipeline() -> KnowledgeGraphPipeline:
 class PipelineTests(unittest.TestCase):
     def test_extracts_lemmatized_spo_triple(self):
         pipeline = make_pipeline()
-        triples = pipeline.extract_triples(["Ada Lovelace wrote notes."])
-        self.assertIn(Triple("ada lovelace", "write", "note", "Ada Lovelace wrote notes."), triples)
+        triples = pipeline.extract_triples(["Roger Federer won matches."])
+        self.assertIn(Triple("roger federer", "win", "match", "Roger Federer won matches."), triples)
 
     def test_query_supports_wildcards(self):
         pipeline = make_pipeline()
-        pipeline.build_graph([Triple("ada", "write", "note", "Ada wrote notes.")])
+        pipeline.build_graph([Triple("roger federer", "win", "match", "Roger Federer won matches.")])
         self.assertEqual(
-            pipeline.query(subject="Ada"),
-            [Triple("ada", "write", "note", "Ada wrote notes.")],
+            pipeline.query(subject="Roger Federer"),
+            [Triple("roger federer", "win", "match", "Roger Federer won matches.")],
         )

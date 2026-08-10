@@ -11,7 +11,7 @@ from .pipeline import KnowledgeGraphPipeline, summarize_triples
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build and query a knowledge graph from a Wikipedia article.")
-    parser.add_argument("title", help="Exact Wikipedia page title, e.g. 'Ada Lovelace'")
+    parser.add_argument("title", help="Exact Wikipedia page title, e.g. 'Federer–Nadal rivalry'")
     parser.add_argument("--max-sentences", type=int, default=120, help="Limit processing for a smaller graph")
     parser.add_argument("--output", default="knowledge_graph.html", help="Interactive HTML graph output")
     parser.add_argument("--subject", help="Exact normalized subject filter")

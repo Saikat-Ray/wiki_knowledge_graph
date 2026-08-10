@@ -40,8 +40,8 @@ cd /Users/admin/Documents/Codex/2026-08-07/build/outputs/wiki_knowledge_graph
 docker compose up --build
 ```
 
-The default run starts Neo4j, creates `knowledge_graph.html` using the Ada
-Lovelace article, and imports its facts into Neo4j. The database is ready in
+The default run starts Neo4j, creates `knowledge_graph.html` using the
+Federer–Nadal rivalry article, and imports its facts into Neo4j. The database is ready in
 Neo4j Browser at `http://localhost:7474`. Set `NEO4J_PASSWORD` before the first
 start to use your own local password.
 
@@ -54,7 +54,7 @@ Use a different page or query by passing CLI arguments to a one-off container:
 
 ```bash
 docker compose run --rm wiki-kg "Marie Curie" --max-sentences 80 --output marie_curie_graph.html
-docker compose run --rm wiki-kg "Ada Lovelace" --subject "ada lovelace"
+docker compose run --rm wiki-kg "Federer–Nadal rivalry" --subject "roger federer"
 ```
 
 Run the test suite inside the same development image:
@@ -74,9 +74,9 @@ export NEO4J_PASSWORD='choose-a-local-password'
 docker compose up -d neo4j
 # Rebuild after this project's dependency changes (the Neo4j driver is in requirements.txt).
 docker compose build wiki-kg
-docker compose run --rm -e NEO4J_PASSWORD wiki-kg "Ada Lovelace" \
+docker compose run --rm -e NEO4J_PASSWORD wiki-kg "Federer–Nadal rivalry" \
   --max-sentences 100 \
-  --output ada_lovelace_graph.html \
+  --output federer_nadal_rivalry_graph.html \
   --neo4j-uri bolt://neo4j:7687 \
   --neo4j-password "$NEO4J_PASSWORD"
 ```
@@ -94,28 +94,28 @@ MATCH (subject:Entity)-[relation:RELATION]->(object:Entity)
 RETURN subject, relation, object
 LIMIT 50;
 
-MATCH (subject:Entity {name: 'ada lovelace'})-[relation:RELATION]->(object:Entity)
+MATCH (subject:Entity {name: 'roger federer'})-[relation:RELATION]->(object:Entity)
 RETURN subject.name, relation.predicate, object.name, relation.sentences;
 ```
 
 ## Build a graph
 
 ```bash
-python -m wiki_kg.cli "Ada Lovelace" --max-sentences 100 --output ada_lovelace_graph.html
+python -m wiki_kg.cli "Federer–Nadal rivalry" --max-sentences 100 --output federer_nadal_rivalry_graph.html
 ```
 
-Open `ada_lovelace_graph.html` in a browser. Hover over an edge to see source-sentence evidence.
+Open `federer_nadal_rivalry_graph.html` in a browser. Hover over an edge to see source-sentence evidence.
 
 ## Query facts
 
 All query terms use the normalized forms stored in the graph: lowercase lemmas with stop words removed. For example, `wrote` becomes `write` and `notes` becomes `note`.
 
 ```bash
-# Find every fact whose subject is normalized to "ada lovelace"
-python -m wiki_kg.cli "Ada Lovelace" --subject "ada lovelace"
+# Find every fact whose subject is normalized to "roger federer"
+python -m wiki_kg.cli "Federer–Nadal rivalry" --subject "roger federer"
 
 # Find a particular relation
-python -m wiki_kg.cli "Ada Lovelace" --predicate write --object note
+python -m wiki_kg.cli "Federer–Nadal rivalry" --predicate defeat
 ```
 
 ## Pipeline

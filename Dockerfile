@@ -18,5 +18,4 @@ COPY tests ./tests
 # Compose supplies article-specific arguments. Override the entrypoint with
 # `python` when running test or other development commands.
 ENTRYPOINT ["python", "-m", "wiki_kg.cli"]
-#CMD ["Ada Lovelace", "--max-sentences", "100", "--output", "knowledge_graph.html"]
 CMD ["Federer–Nadal rivalry", "--max-sentences", "100", "--output", "knowledge_graph.html"]

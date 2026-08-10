@@ -32,7 +32,7 @@ services:
       # Source mount enables edit-run local development; generated HTML stays local.
       - .:/app
     command:
-      - Ada Lovelace
+      - Federer–Nadal rivalry
       - --max-sentences
       - "100"
       - --output
