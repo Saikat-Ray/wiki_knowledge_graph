@@ -13,6 +13,7 @@ RUN python -m pip install --upgrade pip \
     && python -m spacy download en_core_web_sm
 
 COPY src ./src
+COPY app ./app
 COPY tests ./tests
 
 # Compose supplies article-specific arguments. Override the entrypoint with

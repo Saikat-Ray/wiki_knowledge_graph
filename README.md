@@ -50,6 +50,15 @@ export NEO4J_PASSWORD='choose-a-local-password'
 docker compose up --build
 ```
 
+The same Compose stack starts the Streamlit chat interface at
+`http://localhost:8501`. It queries Neo4j for graph context and uses OpenAI to
+form an answer. Supply an API key before starting it:
+
+```bash
+export OPENAI_API_KEY='your-api-key'
+docker compose up --build
+```
+
 Use a different page or query by passing CLI arguments to a one-off container:
 
 ```bash
