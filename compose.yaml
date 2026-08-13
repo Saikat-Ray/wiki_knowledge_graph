@@ -1,0 +1,63 @@
+services:
+  neo4j:
+    image: neo4j:5-community
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-local-dev-password}
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      # Check that Bolt is accepting connections. Authentication is verified by
+      # the importer itself, avoiding shell interpolation of local passwords.
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/7687'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  wiki-kg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wiki-knowledge-graph:dev
+    environment:
+      PYTHONPATH: /app/src
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-local-dev-password}
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    volumes:
+      # Source mount enables edit-run local development; generated HTML stays local.
+      - .:/app
+    command:
+      - Federer–Nadal rivalry
+      - --max-sentences
+      - "100"
+      - --output
+      - knowledge_graph.html
+      - --neo4j-uri
+      - bolt://neo4j:7687
+
+  chat-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wiki-knowledge-graph:dev
+    environment:
+      NEO4J_CONNECTION_URI: bolt://neo4j:7687
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-local-dev-password}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    ports:
+      - "8501:8501"
+    entrypoint: ["streamlit", "run", "app/chat_app.py"]
+    command: ["--server.address=0.0.0.0", "--server.port=8501"]
+
+volumes:
+  neo4j_data:
